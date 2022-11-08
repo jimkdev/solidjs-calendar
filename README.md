@@ -1,5 +1,5 @@
 # solidjs-calendar
-This is an app made with solidjs
+This is a calendar app made with solidjs
 
 ------------------------------
 
