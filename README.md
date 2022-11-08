@@ -9,7 +9,7 @@ This is an app made with solidjs
 
 ------------------------------
 
-Installation
+<b>Installation</b>
 
 1) Run `npm install`
 2) Run `npm run dev`
