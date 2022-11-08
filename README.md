@@ -3,7 +3,7 @@ This is an app made with solidjs
 
 ------------------------------
 
-Requirements
+<b>Requirements</b>
 1) Node v16.18.0
 2) SolidJS
 
