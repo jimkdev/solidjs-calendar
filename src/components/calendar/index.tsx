@@ -1,9 +1,9 @@
-import { Component, createSignal, For, Show } from 'solid-js';
+import { Component, createSignal, For, Setter, Show } from 'solid-js';
 import { getMonthName, getTotalMonthDays, getWeeks } from '../../utils/date-utils';
 import { CalendarHeader } from '../calendar-header/index';
-// import { DropdownMenu } from '../dropdown';
+import { ReservationMenu } from '../reservation-menu';
 
-export interface monthProps {
+interface monthProps {
 	name:string;
 	index:number;
 };
@@ -13,13 +13,27 @@ export interface CalendarProps {
 	month: monthProps;
 	year:number;
 	months:string[];
+	totalDays: number;
+	weeks: number[][];
+	setMonth: Setter<object>;
+	setYear: Setter<number>;
+	setTotalDays: Setter<number>;
+	setDay: Setter<number>;
+	setWeeks: Setter<number[][]>;
 };
 
-export interface DropdownProps {
+export interface ReservationProps {
 	visible: boolean;
-	startTime:string,
-	endTime:string;
-	reservations:object[]
+	startTime:string | null;
+	endTime:string | null;
+	selectedDate:number;
+	selectedMonth:monthProps;
+	selectedYear:number;
+	reservations:object[];
+	setVisible: Setter<boolean>;
+	setStartTime: Setter<string>;
+	setEndTime: Setter<string>;
+	setReservations: Setter<object>;
 };
 
 export const Calendar: Component = () => {
@@ -54,7 +68,7 @@ export const Calendar: Component = () => {
 	let year = today.getFullYear();
 
 	const [currentDay, setDay] = createSignal(new Date(year, month, 1).getDay());
-	// const [currentDate, setDate] = createSignal(today.getDate());
+	const [currentDate, setDate] = createSignal(today.getDate());
 	const [currentMonth, setMonth] = createSignal({
 		name: getMonthName(month, months),
 		index: month
@@ -62,130 +76,118 @@ export const Calendar: Component = () => {
 	const [currentYear, setYear] = createSignal(year);
 	const [totalDays, setTotalDays] = createSignal(getTotalMonthDays(currentMonth().index, currentYear()));
 	const [weeks, setWeeks] = createSignal(getWeeks(currentDay(), totalDays()));
-	// const [visible, setVisible] = createSignal(false);
-	// const [startTime, setStartTime] = createSignal();
-	// const [endTime, setEndTime] = createSignal();
-	// const [reservations, setReservations] = createSignal([]);
+	const [visible, setVisible] = createSignal(false);
+	const [startTime, setStartTime] = createSignal(null);
+	const [endTime, setEndTime] = createSignal(null);
+	const [reservations, setReservations] = createSignal([]);
 
-	// const showDropdown = (event:Event) => {
-	// 	setDate(event.target.value);
-	// 	if(visible()) setVisible(false);
-	// 	setVisible(true);
-	// };
+	const makeReservation = (event:Event) => {
+		if(!event.target) return;
+
+		const element = event.target as HTMLInputElement;
+		if(element.value) {
+			let parsedDate:number | typeof NaN = NaN;
+			// Try to convert dateValue from String to Number
+			try {
+				parsedDate = Number.parseInt(element.value);
+			} catch(err) {
+				console.log(err);
+			} finally {
+				if(Number.isNaN(parsedDate)) return;
+				setDate(parsedDate);
+				if(visible()) setVisible(false);
+				setVisible(true);
+			}
+		}
+	};
 
 	return (
-		<div>
-			<div class="vertical-container border">
-				<table class="calendar">
-					<thead>
-						<tr>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-						</tr>
-						<tr>
-							<th colSpan="7">
-								<CalendarHeader
-									day={currentDay()}
-									month={currentMonth()}
-									year={currentYear()}
-									totalDays={totalDays()}
-									weeks={weeks()}
-									setDay={setDay}
-									setMonth={setMonth}
-									setYear={setYear}
-									setTotalDays={setTotalDays}
-									setWeeks={setWeeks}
-									months={months}/>
-							</th>
-						</tr>
-						<tr>
-							<For each={weekDays}>{(weekDay) => {
-								return (
-									<th>{weekDay}</th>
-								);
-							}}</For>
-						</tr>
-					</thead>
-					<tbody>
-						<For each={weeks()}>{(week) => {
+		<>
+			<table class="calendar">
+				<thead>
+					<tr>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+					</tr>
+					<tr>
+						<th colSpan="7">
+							<CalendarHeader
+								day={currentDay()}
+								month={currentMonth()}
+								year={currentYear()}
+								totalDays={totalDays()}
+								weeks={weeks()}
+								setDay={setDay}
+								setMonth={setMonth}
+								setYear={setYear}
+								setTotalDays={setTotalDays}
+								setWeeks={setWeeks}
+								months={months}/>
+						</th>
+					</tr>
+					<tr>
+						<For each={weekDays}>{(weekDay) => {
 							return (
-								<tr>
-									<For each={week}>{(day, id) => {
-										return (
-											<Show when={day !== 0} fallback={
-												<td class="inactive"></td>
-											}>
-												<Show
-													when={
-														day === today.getDate()
-														&& currentMonth().index === month
-														&& currentYear() === year}
-													fallback={
-														<td class="active">
-															<div class="dropdown">
-																<button
-																	// onclick={showDropdown}
-																	value={day}
-																	class="cell-btn">{day}</button>
-																{/* <Show when={
-																	day === today.getDate()
-																	&& currentMonth().index
-																	&& currentYear()}>
-																		<div>
-																			<DropdownMenu
-																				visible={visible()}
-																				setVisible={setVisible}
-																				startTime={startTime()}
-																				setStartTime={setStartTime}
-																				endTime={endTime()}
-																				setEndTime={setEndTime}
-																				reservations={reservations()}
-																				setReservations={setReservations}
-																				selectedDate={currentDate()}
-																				selectedYear={currentYear()}
-																				selectedMonth={currentMonth()}/>
-																		</div>
-																</Show> */}
-															</div>
-														</td>
-												}>
-													<td>
-														<div class="dropdown">
-															<button
-																// onclick={showDropdown}
-																value={day}
-																class="current-day cell-btn">{day}</button>
-															{/* <div class="dropdown-content">
-																<DropdownMenu
-																	visible={visible()}
-																	setVisible={setVisible}
-																	startTime={startTime()}
-																	setStartTime={setStartTime}
-																	endTime={endTime()}
-																	setEndTime={setEndTime}
-																	reservations={reservations()}
-																	setReservations={setReservations}
-																	selectedDate={currentDate()}
-																	selectedYear={currentYear()}
-																	selectedMonth={currentMonth()}/>
-															</div> */}
-														</div>
-													</td>
-												</Show>
-											</Show>
-										);
-									}}</For>
-								</tr>
+								<th>{weekDay}</th>
 							);
 						}}</For>
-					</tbody>
-				</table>
-			</div>
-		</div>
+					</tr>
+				</thead>
+				<tbody>
+					<For each={weeks()}>{(week) => {
+						return (
+							<tr>
+								<For each={week}>{(day, id) => {
+									return (
+										<Show when={day !== 0} fallback={
+											<td></td>
+										}>
+											<Show
+												when={
+													day === today.getDate()
+													&& currentMonth().index === month
+													&& currentYear() === year}
+												fallback={
+													<td>
+														<button
+															onclick={makeReservation}
+															value={day.toString()}>{day}</button>
+													</td>
+												}>
+												<td class="current-date">
+													<button
+														onclick={makeReservation}
+														value={day.toString()}>{day}</button>
+												</td>
+											</Show>
+										</Show>
+									);
+								}}</For>
+							</tr>
+						);
+					}}</For>
+				</tbody>
+			</table>
+			{/*Show when visible is true*/}
+			<Show when={visible()}>
+				<ReservationMenu
+					visible={visible()}
+					startTime={startTime()}
+					endTime={endTime()}
+					selectedDate={currentDate()}
+					selectedMonth={currentMonth()}
+					selectedYear={currentYear()}
+					reservations={reservations()}
+					setVisible={setVisible}
+					setStartTime={setStartTime}
+					setEndTime={setEndTime}
+					setReservations={setReservations}/>
+			</Show>
+		</>
 	);
 };

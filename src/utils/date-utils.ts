@@ -11,12 +11,10 @@ export const getMonthName = (index:number, months:string[]):string => {
 };
 
 export const getNextMonth = (currentMonth:number):number => {
-	console.log(currentMonth);
 	return (currentMonth === 11 ? 0 : currentMonth + 1);
 };
 
 export const getPreviousMonth = (currentMonth:number):number => {
-	console.log(currentMonth);
 	return (currentMonth === 0 ? 11 : currentMonth - 1);
 };
 
@@ -56,9 +54,6 @@ export const getTotalMonthDays = (currentMonth:number, currentYear:number):numbe
 export const createNewDate = (currentDay:number, currentMonth:number, currentYear:number):Date => {
 	const formattedDay = formatDateDayOrMonth(currentDay.toString());
 	const formattedMonth = formatDateDayOrMonth(currentMonth.toString());
-	console.log(formattedDay);
-	console.log(formattedMonth);
-	console.log(currentYear);
 	
 	return new Date(`${currentYear}-${formattedMonth}-${formattedDay}`);
 };

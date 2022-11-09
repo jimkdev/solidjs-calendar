@@ -10,15 +10,11 @@ export const CalendarHeader: Component<CalendarProps> = (props: CalendarProps) =
 			name: getMonthName(currentMonth, props.months),
 			index: currentMonth
 		});
-		// console.log(`New month ${props.month}`);
 		props.setYear(getPreviousYear(currentMonth, props.year));
-		// console.log(`New year ${props.year}`);
 		props.setTotalDays(getTotalMonthDays(currentMonth, props.year));
 		const newDate = createNewDate(1, currentMonth + 1, props.year);
-		console.log(newDate)
 		props.setDay(newDate.getDay());
 		props.setWeeks(getWeeks(props.day, props.totalDays));
-		// console.log(newDate);
 	};
 
 	const next = () => {
@@ -30,37 +26,36 @@ export const CalendarHeader: Component<CalendarProps> = (props: CalendarProps) =
 		props.setYear(getNextYear(currentMonth, props.year));
 		props.setTotalDays(getTotalMonthDays(currentMonth, props.year));
 		const newDate = createNewDate(1, currentMonth + 1, props.year);
-		console.log(newDate);
 		props.setDay(newDate.getDay());
 		props.setWeeks(getWeeks(props.day, props.totalDays));
 	};
 
 	return (
 		<div>
-			<span>
-				<button
-					type="button"
-					onclick={previous}
-					class="calendar-btn">&lt;</button>
-			</span>
+			<button
+				type="button"
+				onclick={previous}
+				class="header-btn">&lt;</button>
+			{/* <span>
+			</span> */}
 			<Show
 				when={props.month && props.year}
 				fallback={
 					<span>Month, year</span>
 				}
 			>
-					<span>
-						<button
-							type="button"
-							class="calendar-btn wpx-350">{props.month.name} {props.year}</button>
-					</span>
-			</Show>
-			<span>
 				<button
 					type="button"
-					onclick={next}
-					class="calendar-btn">&gt;</button>
-			</span>
+					class="header-month-btn">{props.month.name} {props.year}</button>
+				{/* <span>
+				</span> */}
+			</Show>
+			<button
+				type="button"
+				onclick={next}
+				class="header-btn">&gt;</button>
+			{/* <span>
+			</span> */}
 		</div>
 	);
 };
