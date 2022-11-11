@@ -133,7 +133,7 @@ export const Calendar: Component = () => {
 					<tr>
 						<For each={weekDays}>{(weekDay) => {
 							return (
-								<th>{weekDay}</th>
+								<th class="weekday-cell">{weekDay}</th>
 							);
 						}}</For>
 					</tr>
@@ -145,7 +145,7 @@ export const Calendar: Component = () => {
 								<For each={week}>{(day, id) => {
 									return (
 										<Show when={day !== 0} fallback={
-											<td></td>
+											<td class="no-date"></td>
 										}>
 											<Show
 												when={
@@ -153,7 +153,7 @@ export const Calendar: Component = () => {
 													&& currentMonth().index === month
 													&& currentYear() === year}
 												fallback={
-													<td>
+													<td class="other-date">
 														<button
 															onclick={makeReservation}
 															value={day.toString()}>{day}</button>

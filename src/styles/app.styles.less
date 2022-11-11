@@ -8,13 +8,32 @@
 	font-size: large;
 }
 
+body {
+	padding: 20px;
+}
+
 table {
 	table-layout: fixed;
 	border-collapse: collapse;
 }
 
+.weekday-cell {
+	.padding-bottom(10px);
+}
+
+.other-date {
+	border: 1px solid @black;
+}
+
 .current-date {
 	border: 2px solid @red;
+}
+
+.no-date {
+	border-top: 1px solid @black;
+	border-right: 1px solid @dark-grey;
+	border-left: 1px solid @dark-grey;
+	.background-color(@light-grey);
 }
 
 .header-btn, .header-month-btn {
@@ -29,12 +48,24 @@ table {
 
 .header-btn {
 	.width(@width: 34px);
+	.background-color(transparent);
+	border: 2px solid @dark-grey;
+	&:hover {
+		.background-color(@dark-grey);
+		color: @white;
+	}
 }
 
 .header-month-btn {
 	.width(@width: 180px);
 	.margin-left(55px);
 	.margin-right(55px);
+	.background-color(transparent);
+	border: 2px solid @dark-grey;
+	&:hover {
+		.background-color(@dark-grey);
+		color: @white;
+	}
 }
 
 .calendar {
@@ -51,9 +82,12 @@ table {
 	tr {
 		td {
 			.height(@height: 100px);
+			.height(@height: -moz-available);
 			.width(@width: 100px);
+			.width(@width: -moz-available);
 
 			button {
+				appearance: none;
 				.height(@height: 100%);
 				.width(@width: 100%);
 				.width(@width: -moz-available);
@@ -63,6 +97,7 @@ table {
 				
 				&:hover {
 					cursor: pointer;
+					.background-color(@light-grey);
 				}
 			}
 		}
@@ -81,13 +116,59 @@ table {
 	left: 0;
 	right: 0;
 	z-index: 300;
-	background-color: rgba(196, 196, 196, 0.5);
+	.background-color(@white);
+	border-radius: 20px;
+	border: 2px solid @dark-grey;
 
 	.modal-header {
+		.background-color(@light-grey);
+		color: @black;
 		padding: 20px;
+
+		h2 {
+			font-size: larger;
+		}
+	}
+
+	.modal-content {
+		.padding-top(20px);
+		.padding-bottom(20px);
+
+		label {
+			.margin-right(15px);
+		}
+
+		td {
+			.padding-top(10px);
+			.padding-bottom(10px);
+		}
+
+		input {
+			appearance: none;
+			border: 2px solid @dark-grey;
+			.width(@width:180px);
+			padding: 5px;
+		}
 	}
 
 	.modal-footer {
-		padding: 20px;
+		.background-color(@light-grey);
+		padding: 10px;
+
+		button {
+			appearance: none;
+
+			.width(@width:100px);
+			.height(@height:34px);
+			.margin-left(5px);
+			.margin-right(5px);
+			.background-color(transparent);
+			border: 2px solid @dark-grey;
+			&:hover {
+				cursor: pointer;
+				.background-color(@dark-grey);
+				color: @white;
+			}
+		}
 	}
 }
