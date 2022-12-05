@@ -14,7 +14,6 @@ This is a calendar app made with solidjs
 <b>Installation</b>
 
 1. Run `npm install`
-2. Run `npm install less`
-3. Run `npm run dev`
+2. Run `npm run dev`
 
 ---
