@@ -2,6 +2,8 @@ import { Component } from "solid-js";
 import { createNewDate } from "../../utils/date-utils";
 import { ReservationProps } from "../calendar";
 
+//const [valid, setValid] = createSignal(false);
+
 export const Modal: Component<ReservationProps> = (props: ReservationProps) => {
   const saveReservation = () => {
     props.reservations.push({
@@ -49,7 +51,9 @@ export const Modal: Component<ReservationProps> = (props: ReservationProps) => {
                       props.setStartTime(element.value);
                     }}
                   >
-                    <option value="7">07:00</option>
+                    <option value="7" selected>
+                      07:00
+                    </option>
                     <option value="8">08:00</option>
                     <option value="9">09:00</option>
                     <option value="10">10:00</option>
@@ -82,7 +86,9 @@ export const Modal: Component<ReservationProps> = (props: ReservationProps) => {
                     }}
                   >
                     <option value="7">07:00</option>
-                    <option value="8">08:00</option>
+                    <option value="8" selected>
+                      08:00
+                    </option>
                     <option value="9">09:00</option>
                     <option value="10">10:00</option>
                     <option value="11">11:00</option>
