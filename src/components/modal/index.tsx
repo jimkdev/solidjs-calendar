@@ -1,10 +1,10 @@
-import { Component } from "solid-js";
+import { Component, createSignal, Show } from "solid-js";
 import { createNewDate } from "../../utils/date-utils";
 import { ReservationProps } from "../calendar";
 
-//const [valid, setValid] = createSignal(false);
-
 export const Modal: Component<ReservationProps> = (props: ReservationProps) => {
+  const [timeValid, setTimeValid] = createSignal(true);
+
   const saveReservation = () => {
     props.reservations.push({
       startTime: props.startTime,
@@ -48,7 +48,15 @@ export const Modal: Component<ReservationProps> = (props: ReservationProps) => {
                     onchange={(event) => {
                       const element = event.target as HTMLInputElement;
                       if (!element.value) return;
-                      props.setStartTime(element.value);
+                      if (
+                        Number.parseInt(element.value) <
+                        Number.parseInt(props.endTime!)
+                      ) {
+                        props.setStartTime(element.value);
+                        setTimeValid(true);
+                      } else {
+                        setTimeValid(false);
+                      }
                     }}
                   >
                     <option value="7" selected>
@@ -82,7 +90,15 @@ export const Modal: Component<ReservationProps> = (props: ReservationProps) => {
                     onchange={(event) => {
                       const element = event.target as HTMLInputElement;
                       if (!element.value) return;
-                      props.setEndTime(element.value);
+                      if (
+                        Number.parseInt(element.value) >
+                        Number.parseInt(props.startTime!)
+                      ) {
+                        props.setEndTime(element.value);
+                        setTimeValid(true);
+                      } else {
+                        setTimeValid(false);
+                      }
                     }}
                   >
                     <option value="7">07:00</option>
@@ -117,9 +133,21 @@ export const Modal: Component<ReservationProps> = (props: ReservationProps) => {
           </button>
         </span>
         <span>
-          <button onclick={saveReservation} type="button">
-            Reserve
-          </button>
+          <Show
+            when={timeValid()}
+            fallback={
+              <>
+                <span>Η τελική ώρα πρέπει να είναι μεγαλύτερη της αρχικής</span>
+                <button onclick={saveReservation} disabled type="button">
+                  Reserve
+                </button>
+              </>
+            }
+          >
+            <button onclick={saveReservation} type="button">
+              Reserve
+            </button>
+          </Show>
         </span>
       </footer>
     </div>
