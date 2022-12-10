@@ -43,8 +43,12 @@ export interface ReservationProps {
 }
 
 export interface MonthsListProps {
+  year: number;
   setMonthsVisible: Setter<boolean>;
   setMonth: Setter<object>;
+  setTotalDays: Setter<object>;
+  setDay: Setter<object>;
+  setWeeks: Setter<object>;
 }
 
 export const months = [
@@ -218,7 +222,7 @@ export const Calendar: Component = () => {
         />
       </Show>
       <Show when={monthsVisible()}>
-        <MonthsList setMonthsVisible={setMonthsVisible} />
+        <MonthsList setMonthsVisible={setMonthsVisible} setMonth={setMonth} />
       </Show>
     </>
   );
