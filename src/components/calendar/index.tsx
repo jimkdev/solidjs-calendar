@@ -5,6 +5,7 @@ import {
   getWeeks,
 } from "../../utils/date-utils";
 import { CalendarHeader } from "../calendar-header/index";
+import { MonthsList } from "../months_list/index";
 import { ReservationMenu } from "../reservation-menu";
 
 interface monthProps {
@@ -24,6 +25,7 @@ export interface CalendarProps {
   setTotalDays: Setter<number>;
   setDay: Setter<number>;
   setWeeks: Setter<number[][]>;
+  setMonthsVisible: Setter<boolean>;
 }
 
 export interface ReservationProps {
@@ -40,6 +42,26 @@ export interface ReservationProps {
   setReservations: Setter<object>;
 }
 
+export interface MonthsListProps {
+  setMonthsVisible: Setter<boolean>;
+  setMonth: Setter<object>;
+}
+
+export const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export const Calendar: Component = () => {
   const weekDays = [
     "Sunday",
@@ -51,23 +73,7 @@ export const Calendar: Component = () => {
     "Saturday",
   ];
 
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
   const today = new Date();
-  let day = today.getDay();
   let month = today.getMonth();
   let year = today.getFullYear();
 
@@ -83,8 +89,9 @@ export const Calendar: Component = () => {
   );
   const [weeks, setWeeks] = createSignal(getWeeks(currentDay(), totalDays()));
   const [visible, setVisible] = createSignal(false);
-  const [startTime, setStartTime] = createSignal(7);
-  const [endTime, setEndTime] = createSignal(8);
+  const [monthsVisible, setMonthsVisible] = createSignal(false);
+  const [startTime, setStartTime] = createSignal("7");
+  const [endTime, setEndTime] = createSignal("8");
   const [reservations, setReservations] = createSignal([]);
 
   const makeReservation = (event: Event) => {
@@ -134,6 +141,7 @@ export const Calendar: Component = () => {
                 setTotalDays={setTotalDays}
                 setWeeks={setWeeks}
                 months={months}
+                setMonthsVisible={setMonthsVisible}
               />
             </th>
           </tr>
@@ -208,6 +216,9 @@ export const Calendar: Component = () => {
           setEndTime={setEndTime}
           setReservations={setReservations}
         />
+      </Show>
+      <Show when={monthsVisible()}>
+        <MonthsList setMonthsVisible={setMonthsVisible} />
       </Show>
     </>
   );
